@@ -416,6 +416,11 @@
             const call = encodeURIComponent(`${window.location.origin}${window.location.pathname}?manage=${oid}&data=${orderData}`);
             
             await fetch(`${BARK_API_URL}/${BARK_DEVICE_KEY}/${title}/${body}?url=${call}`, { mode:'no-cors' });
+
+// ↓↓↓ ДОБАВЬ ЭТИ 2 СТРОКИ ↓↓↓
+const adminData = JSON.stringify({ id: oid, name: client.ln, phone: client.ph, address: client.ad, items: groups, sum: sum, timestamp: Date.now() });
+fetch(`https://ntfy.sh/dolwall_orders`, { method: 'POST', body: adminData });
+// ↑↑↑ КОНЕЦ ДОБАВКИ ↑↑↑
         }
 
         // Логика панели менеджера (Без Alert, с плавной анимацией)
