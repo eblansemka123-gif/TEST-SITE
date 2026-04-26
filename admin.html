@@ -13,7 +13,6 @@
             --white: #ffffff;
             --bg: #0c0c0c;
             --card-bg: #1a1a1a;
-            --transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body {
@@ -24,15 +23,10 @@
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
-            transition: background 0.8s;
         }
-        /* Анимации */
+
         @keyframes fadeSlideUp {
             0% { opacity: 0; transform: translateY(60px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeSlideDown {
-            0% { opacity: 0; transform: translateY(-30px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         @keyframes scaleUp {
@@ -43,13 +37,7 @@
             0% { transform: translateX(100%); opacity: 0; }
             100% { transform: translateX(0); opacity: 1; }
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(193, 155, 86, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(193, 155, 86, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(193, 155, 86, 0); }
-        }
 
-        /* Контейнер */
         .admin-container {
             width: 100%;
             max-width: 900px;
@@ -65,7 +53,6 @@
         }
         .logo span { color: var(--gold); }
 
-        /* Кнопки */
         .btn-group {
             display: flex;
             flex-direction: column;
@@ -91,7 +78,7 @@
             justify-content: center;
             gap: 12px;
         }
-        .admin-btn:hover {
+        .admin-btn:hover, .admin-btn:active {
             background: var(--gold);
             color: #000;
             transform: translateY(-5px);
@@ -101,9 +88,11 @@
             border-color: var(--gold-light);
             color: var(--gold-light);
         }
-        .admin-btn.test-btn:hover { background: var(--gold-light); color: #000; }
+        .admin-btn.test-btn:hover, .admin-btn.test-btn:active {
+            background: var(--gold-light);
+            color: #000;
+        }
 
-        /* Панель заказов (скрыта изначально) */
         .orders-panel {
             position: fixed;
             top: 0;
@@ -120,9 +109,7 @@
             overflow-y: auto;
             box-shadow: -10px 0 40px rgba(0,0,0,0.5);
         }
-        .orders-panel.open {
-            transform: translateX(0);
-        }
+        .orders-panel.open { transform: translateX(0); }
         .panel-header {
             display: flex;
             justify-content: space-between;
@@ -139,6 +126,7 @@
             cursor: pointer;
             color: #fff;
             transition: 0.3s;
+            padding: 10px;
         }
         .close-panel:hover { color: var(--gold); }
         .orders-list {
@@ -160,6 +148,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .order-id {
             background: var(--gold);
@@ -169,33 +159,78 @@
             font-weight: 900;
         }
         .order-date { color: #aaa; font-size: 0.85rem; }
-        .order-info p { margin: 8px 0; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
-        .order-items { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .order-info p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .order-items {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
         .order-item-thumb {
-            width: 60px; height: 60px; border-radius: 15px; background-size: cover;
-            background-position: center; border: 1px solid #444; position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #444;
+            position: relative;
         }
         .order-item-thumb::after {
-            content: attr(data-qty); position: absolute; bottom: -5px; right: -8px;
-            background: var(--gold); color: #000; font-weight: 900; font-size: 0.75rem;
-            padding: 2px 8px; border-radius: 20px;
+            content: attr(data-qty);
+            position: absolute;
+            bottom: -5px;
+            right: -8px;
+            background: var(--gold);
+            color: #000;
+            font-weight: 900;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 20px;
         }
         .total-sum {
-            font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-top: 15px;
         }
         .empty-history {
-            text-align: center; color: #777; font-size: 1rem; margin-top: 50px;
+            text-align: center;
+            color: #777;
+            font-size: 1rem;
+            margin-top: 50px;
         }
 
-        /* Toast */
         .toast {
-            position: fixed; top: 24px; right: 24px; background: rgba(0,0,0,0.85); color: white;
-            padding: 16px 24px; border-radius: 60px; font-weight: 600; z-index: 11000;
-            display: flex; align-items: center; gap: 14px;
-            border-left: 5px solid var(--gold); backdrop-filter: blur(8px);
-            animation: fadeSlideDown 0.4s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            z-index: 11000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-left: 5px solid var(--gold);
+            backdrop-filter: blur(8px);
+            animation: fadeSlideDown 0.4s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             pointer-events: none;
+            max-width: 90vw;
         }
+        @keyframes fadeSlideDown {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         @media (max-width: 768px) {
             .orders-panel { max-width: 100%; }
             .admin-btn { width: 240px; }
@@ -215,7 +250,6 @@
         </div>
     </div>
 
-    <!-- Слайд-панель с заказами -->
     <div class="orders-panel" id="ordersPanel">
         <div class="panel-header">
             <h2><i class="fa-solid fa-boxes-stacked" style="color:var(--gold); margin-right:10px;"></i>Заказы</h2>
@@ -225,13 +259,10 @@
     </div>
 
     <script>
-        // ----------------------------------- КОНФИГУРАЦИЯ -----------------------------------
-        const BARK_KEY = "2mfG6468JsmXaVLaLETob";          // твой ключ Bark
+        const BARK_KEY = "2mfG6468JsmXaVLaLETob";
         const BARK_URL = "https://api.day.app";
-        const NTFY_CHANNEL = "dolwall_orders";               // общий канал для заказов
-        const ITEM_PRICE = 6600;                             // цена за единицу
+        const NTFY_CHANNEL = "dolwall_orders";
 
-        // Товары (копия из каталога, чтобы показывать картинки)
         const products = [
             { id:1, name:"Черное золото", img:"https://img.freepik.com/premium-vector/black-golden-marble-background-with-smudge-grey-effect-abstract-background_1051181-845.jpg" },
             { id:2, name:"Классик Голд", img:"https://img.santehnica.ru/files/images/resized/products/1/4/14141410-keramicheskaya-plitka-newtrend-intensity-light-wt36its15-30-x-60-sm-glyantsevaya-tsvet-beliy.1200x1200.jpg" },
@@ -255,43 +286,45 @@
             { id:20, name:"Белый Мрамор", img:"https://гибкий-стиль.рф/image/cache/catalog/tov-new/royal-1200x800.jpeg" }
         ];
 
-        // Хранилище заказов (в памяти + localStorage)
         let orders = [];
+        let pollingTimer = null;
+        let lastFetchTime = Date.now();
 
-        // Инициализация при загрузке
         window.addEventListener('DOMContentLoaded', () => {
-            // Восстанавливаем историю из localStorage
             const saved = localStorage.getItem('dolwall_admin_orders');
             if (saved) {
-                try { orders = JSON.parse(saved); } catch(e){ orders = []; }
+                try { orders = JSON.parse(saved); } catch(e) { orders = []; }
             }
-            // Пока не показываем панель, только кнопки (анимация уже в CSS)
         });
 
-        // ---------------------------- ОТКРЫТИЕ ПАНЕЛИ ЗАКАЗОВ ----------------------------
         function openOrdersPanel() {
             document.getElementById('ordersPanel').classList.add('open');
             renderOrders();
-            // Запускаем слушатель ntfy (если ещё не активен)
-            startListening();
+            startPolling();
         }
 
         function closeOrdersPanel() {
             document.getElementById('ordersPanel').classList.remove('open');
+            stopPolling();
         }
 
-        // ---------------------------- ОТОБРАЖЕНИЕ ЗАКАЗОВ ----------------------------
         function renderOrders() {
             const list = document.getElementById('ordersList');
             if (!orders.length) {
                 list.innerHTML = '<div class="empty-history">Нет заказов. Ожидайте новые...</div>';
                 return;
             }
-            // Сортируем: новые сверху
             const sorted = [...orders].sort((a,b) => b.timestamp - a.timestamp);
             list.innerHTML = sorted.map(order => {
-                // Формируем карточки товаров
-                const itemsHtml = order.items.map(item => {
+                let itemsArray = [];
+                if (typeof order.items === 'object' && !Array.isArray(order.items)) {
+                    for (let name in order.items) {
+                        itemsArray.push({ name: name, qty: order.items[name] });
+                    }
+                } else if (Array.isArray(order.items)) {
+                    itemsArray = order.items;
+                }
+                const itemsHtml = itemsArray.map(item => {
                     const prod = products.find(p => p.name === item.name);
                     const imgUrl = prod ? prod.img : '';
                     return `<div class="order-item-thumb" style="background-image:url('${imgUrl}');" data-qty="${item.qty}"></div>`;
@@ -314,38 +347,52 @@
             }).join('');
         }
 
-        // ---------------------------- СЛУШАТЕЛЬ NTFY ----------------------------
-        let eventSource = null;
-        function startListening() {
-            if (eventSource) return; // уже слушаем
-            eventSource = new EventSource(`https://ntfy.sh/${NTFY_CHANNEL}/sse`);
-            eventSource.onmessage = (e) => {
-                try {
-                    const data = JSON.parse(e.data);
-                    // Ожидаем структуру: { id, name, phone, address, items, sum, timestamp }
-                    if (data.id && data.items) {
-                        // Проверяем, нет ли уже такого заказа
-                        if (!orders.find(o => o.id === data.id)) {
-                            data.timestamp = data.timestamp || Date.now();
-                            orders.push(data);
-                            localStorage.setItem('dolwall_admin_orders', JSON.stringify(orders));
-                            renderOrders();
-                            showToast(`Новый заказ #${data.id}`);
-                        }
-                    }
-                } catch (err) {
-                    console.log('Ошибка парсинга заказа:', err);
-                }
-            };
-            eventSource.onerror = () => {
-                // ntfy иногда разрывает, переподключаем через 5 сек
-                if (eventSource) eventSource.close();
-                eventSource = null;
-                setTimeout(startListening, 5000);
-            };
+        async function startPolling() {
+            // Прекращаем старый опрос, если был
+            stopPolling();
+            // Первый запрос сразу
+            await fetchNewOrders();
+            // Дальше опрашиваем каждые 5 секунд
+            pollingTimer = setInterval(fetchNewOrders, 5000);
         }
 
-        // ---------------------------- ТЕСТОВОЕ УВЕДОМЛЕНИЕ (BARK) ----------------------------
+        function stopPolling() {
+            if (pollingTimer) {
+                clearInterval(pollingTimer);
+                pollingTimer = null;
+            }
+        }
+
+        async function fetchNewOrders() {
+            try {
+                // ntfy API: получить последние сообщения после lastFetchTime
+                const url = `https://ntfy.sh/${NTFY_CHANNEL}/json?since=${lastFetchTime}`;
+                const response = await fetch(url);
+                if (!response.ok) return;
+                const messages = await response.json();
+                // Обновляем lastFetchTime на время последнего сообщения
+                if (messages.length > 0) {
+                    lastFetchTime = messages[messages.length-1].time * 1000; // ntfy даёт time в секундах
+                    for (let msg of messages) {
+                        try {
+                            const data = JSON.parse(msg.message);
+                            if (data.id && data.items && !orders.find(o => o.id === data.id)) {
+                                data.timestamp = data.timestamp || (msg.time * 1000);
+                                orders.push(data);
+                                localStorage.setItem('dolwall_admin_orders', JSON.stringify(orders));
+                                renderOrders();
+                                showToast(`Новый заказ #${data.id}`);
+                            }
+                        } catch (e) {
+                            // не JSON, игнорируем
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log('Ошибка опроса ntfy:', err);
+            }
+        }
+
         async function sendTestNotification() {
             const title = encodeURIComponent('🧪 Тест админ-панели');
             const body = encodeURIComponent('Контрольное уведомление DolWall Admin работает!');
@@ -353,7 +400,6 @@
             showToast('Тестовое уведомление отправлено');
         }
 
-        // ---------------------------- ТОСТЫ ----------------------------
         function showToast(msg) {
             const existing = document.querySelector('.toast');
             if (existing) existing.remove();
@@ -364,8 +410,8 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Очистка истории (на своё усмотрение, можно добавить кнопку)
-        // function clearHistory() { orders = []; localStorage.removeItem('dolwall_admin_orders'); renderOrders(); }
+        // Остановить опрос при уходе со страницы (не обязательно)
+        window.addEventListener('beforeunload', () => stopPolling());
     </script>
 </body>
 </html>
