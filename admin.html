@@ -288,7 +288,7 @@
 
         let orders = [];
         let pollingTimer = null;
-        let lastFetchTime = Date.now();
+        let lastFetchTime = 0; // Теперь начинаем с 0, чтобы получить все старые сообщения
 
         window.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('dolwall_admin_orders');
@@ -348,11 +348,10 @@
         }
 
         async function startPolling() {
-            // Прекращаем старый опрос, если был
             stopPolling();
-            // Первый запрос сразу
+            // Первый запрос сразу (lastFetchTime = 0 вернёт все сообщения)
             await fetchNewOrders();
-            // Дальше опрашиваем каждые 5 секунд
+            // Дальше опрос каждые 5 секунд
             pollingTimer = setInterval(fetchNewOrders, 5000);
         }
 
@@ -365,14 +364,13 @@
 
         async function fetchNewOrders() {
             try {
-                // ntfy API: получить последние сообщения после lastFetchTime
                 const url = `https://ntfy.sh/${NTFY_CHANNEL}/json?since=${lastFetchTime}`;
                 const response = await fetch(url);
                 if (!response.ok) return;
                 const messages = await response.json();
-                // Обновляем lastFetchTime на время последнего сообщения
                 if (messages.length > 0) {
-                    lastFetchTime = messages[messages.length-1].time * 1000; // ntfy даёт time в секундах
+                    // Обновляем lastFetchTime на время последнего сообщения (в миллисекундах)
+                    lastFetchTime = messages[messages.length-1].time * 1000;
                     for (let msg of messages) {
                         try {
                             const data = JSON.parse(msg.message);
@@ -410,7 +408,6 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Остановить опрос при уходе со страницы (не обязательно)
         window.addEventListener('beforeunload', () => stopPolling());
     </script>
 </body>
